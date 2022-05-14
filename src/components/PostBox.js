@@ -1,10 +1,13 @@
 import usePost from '../hooks/usePost.js';
 import { useState, useEffect } from 'react';
+import {useDispatch} from 'react-redux';
+import { addResponse } from './responseSlice.js';
+import Responses from './Responses.js'
 
 const PostBox = () => {
     const {response, isLoading, error, postData} = usePost(); 
     const [postText, setPostText] = useState('');
-    const [AIResponses, setAIResponses] = useState([]);
+    const dispatch = useDispatch();
 
     const handlePostBody = (e) => {
         setPostText(e.target.value);
@@ -12,7 +15,7 @@ const PostBox = () => {
 
     const handlePost = (e) => {
         e.preventDefault();
-        postData({"prompt": postText, "temperature": 0, "max_tokens": 6});
+        postData({"prompt": postText, "temperature": 0, "max_tokens": 1});
     }
 
     if(isLoading){
@@ -28,7 +31,7 @@ const PostBox = () => {
             <>
                 <section className="d-flex flex-column align-items-center m-2">
                     <div className="form-group col-6">
-                        <label className="form-label" for="prompt">Enter prompt</label>
+                        <label className="form-label" htmlFor="prompt">Enter prompt</label>
                         <textarea className="form-control" name="prompt" style={{height: 200}} onChange={handlePostBody} value={postText}></textarea>
                     </div>
                     
@@ -45,7 +48,7 @@ const PostBox = () => {
         return (
             <section className="d-flex flex-column align-items-center m-2">
                 <div className="form-group col-6">
-                    <label className="form-label" for="prompt">Enter prompt</label>
+                    <label className="form-label" htmlFor="prompt">Enter prompt</label>
                     <textarea className="form-control" name="prompt" style={{height: 200}} onChange={handlePostBody} value={postText}></textarea>
                 </div>
                 
@@ -53,42 +56,16 @@ const PostBox = () => {
             </section>
         )
     }else{
-        AIResponses.forEach( resp => { 
-                if(AIResponses.indexOf(resp) === -1)
-                { 
-                    AIResponses.push({prompt: postText, response: response.data.choices[0].text})
-                }
-            });
-        console.log(AIResponses);
+        
         return (
-            <>
-                <section className="d-flex flex-column align-items-center m-2">
-                    <div className="form-group col-6">
-                        <label className="form-label" for="prompt">Enter prompt</label>
-                        <textarea className="form-control" name="prompt" style={{height: 200}} onChange={handlePostBody} value={postText}></textarea>
-                    </div>
-                    
-                    <button className="btn btn-primary col-1 mt-1" onClick={handlePost}>Post</button>
-                </section>
-                <section>
-                    {AIResponses && AIResponses.map(resp =>{
-                        return (
-                            <div class>
-                                <table>
-                                    <tr>
-                                        <td className="fw-bold">Prompt:</td>
-                                        <td>{resp.prompt}</td>
-                                    </tr>
-                                    <tr>
-                                        <td className="fw-bold">Response:</td>
-                                        <td>{resp.response}</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        )
-                    })}
-                </section>
-            </>
+            <section className="d-flex flex-column align-items-center m-2">
+                <div className="form-group col-6">
+                    <label className="form-label" htmlFor="prompt">Enter prompt</label>
+                    <textarea className="form-control" name="prompt" style={{height: 200}} onChange={handlePostBody} value={postText}></textarea>
+                </div>
+                
+                <button className="btn btn-primary col-1 mt-1" onClick={handlePost}>Post</button>
+            </section>
         )
     }
     

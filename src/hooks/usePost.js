@@ -1,6 +1,6 @@
 import axios, { Axios } from 'axios';
 import { useState } from 'react';
-
+  
 const usePost = () => {
     const [response, setResponse] = useState(Axios.AxiosResponse);
     const [error, setError] = useState('');
@@ -9,7 +9,7 @@ const usePost = () => {
         await axios.post("https://api.openai.com/v1/engines/text-curie-001/completions", data, {
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ` //IMPORTANT: CHANGE THIS ASAP, NO PLAIN TEXT KEY!
+                Authorization: `Bearer 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` //IMPORTANT: CHANGE THIS ASAP, NO PLAIN TEXT KEY!
             }
         })
         .then((res) => {
